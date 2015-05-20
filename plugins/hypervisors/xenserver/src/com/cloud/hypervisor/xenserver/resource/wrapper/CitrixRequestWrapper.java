@@ -81,6 +81,7 @@ import com.cloud.agent.api.UnPlugNicCommand;
 import com.cloud.agent.api.UpdateHostPasswordCommand;
 import com.cloud.agent.api.UpgradeSnapshotCommand;
 import com.cloud.agent.api.check.CheckSshCommand;
+import com.cloud.agent.api.GetVmIpAddressCommand;
 import com.cloud.agent.api.proxy.CheckConsoleProxyLoadCommand;
 import com.cloud.agent.api.proxy.WatchConsoleProxyLoadCommand;
 import com.cloud.agent.api.routing.NetworkElementCommand;
@@ -178,6 +179,7 @@ public class CitrixRequestWrapper extends RequestWrapper {
         citrixCommands.put(PvlanSetupCommand.class, new CitrixPvlanSetupCommandWrapper());
         citrixCommands.put(PerformanceMonitorCommand.class, new CitrixPerformanceMonitorCommandWrapper());
         citrixCommands.put(NetworkElementCommand.class, new CitrixNetworkElementCommandWrapper());
+        citrixCommands.put(GetVmIpAddressCommand.class, new CitrixGetVmIpAddressCommandWrapper());
         resources.put(CitrixResourceBase.class, citrixCommands);
 
         // XenServer56Resource commands
