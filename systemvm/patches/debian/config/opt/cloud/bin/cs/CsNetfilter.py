@@ -234,6 +234,7 @@ class CsNetfilter(object):
         self.seen = True
 
     def __convert_to_dict(self, rule):
+        logging.debug(" dictionary  ######### %s" %rule)
         rule = unicode(rule.lstrip())
         rule = rule.replace('! -', '!_-')
         rule = rule.replace('-p all', '')
@@ -248,6 +249,7 @@ class CsNetfilter(object):
         rule = dict(zip(bits[0::2], bits[1::2]))
         if "-A" in rule.keys():
             self.chain = rule["-A"]
+        logging.debug(" rule ######### %s" %rule)
         return rule
 
     def set_table(self, table):
@@ -280,6 +282,7 @@ class CsNetfilter(object):
                  '--dport', '--destination-port', '-o', '!_-o', '-j', '--set-xmark', '--checksum',
                  '--to-source', '--to-destination', '--mark']
         str = ''
+        logging.debug(" Rule ######### %s" %self.rule)
         for k in order:
             if k in self.rule.keys():
                 printable = k.replace('-m2', '-m')
@@ -291,6 +294,7 @@ class CsNetfilter(object):
                 else:
                     str = "%s %s %s" % (str, printable, self.rule[k])
         str = str.replace("--checksum fill", "--checksum-fill")
+        logging.debug(" String ######### %s" %str)
         return str
 
     def __eq__(self, rule):
