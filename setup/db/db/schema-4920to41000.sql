@@ -229,3 +229,13 @@ JOIN `cloud`.`service_offering` o ON (v.service_offering_id = o.id)
 JOIN `cloud`.`vm_snapshots` s ON (s.service_offering_id = o.id AND s.vm_id = v.id)
 WHERE (o.cpu is null AND o.speed IS NULL AND o.ram_size IS NULL) AND
 (d.name = 'cpuNumber' OR d.name = 'cpuSpeed' OR d.name = 'memory');
+
+CREATE TABLE `cloud`.`firewall_rules_dcidrs`(
+        `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+        `firewall_rule_id` BIGINT(20) unsigned NOT NULL,
+        `destination_cidr` VARCHAR(18) DEFAULT NULL,
+         PRIMARY KEY (id),
+         UNIQUE KEY `unique_rule_dcidrs` (`firewall_rule_id`, `destination_cidr`),
+         KEY `fk_firewall_dcidrs_firewall_rules` (`firewall_rule_id`),
+         CONSTRAINT `fk_firewall_dcidrs_firewall_rules` FOREIGN KEY (`firewall_rule_id`) REFERENCES `firewall_rules` (`id`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
