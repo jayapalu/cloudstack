@@ -67,6 +67,8 @@ function install_packages() {
     xenstore-utils libxenstore3.0 \
     conntrackd ipvsadm libnetfilter-conntrack3 libnl-3-200 libnl-genl-3-200 \
     ipcalc \
+    ipset \
+    openjdk-7-jre-headless \
     iptables-persistent \
     libtcnative-1 libssl-dev libapr1-dev \
     python-flask \
