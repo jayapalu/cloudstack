@@ -1942,7 +1942,7 @@ Configurable, StateListener<VirtualMachine.State, VirtualMachine.Event, VirtualM
             final List<String> sourceCidr = new ArrayList<String>();
             final List<String> destCidr = new ArrayList<String>();
 
-            sourceCidr.add(NetUtils.ALL_CIDRS);
+            sourceCidr.add(network.getCidr());
             destCidr.add(NetUtils.ALL_CIDRS);
 
             final FirewallRule rule = new FirewallRuleVO(null, null, null, null, "all", networkId, network.getAccountId(), network.getDomainId(), Purpose.Firewall, sourceCidr,

@@ -249,9 +249,9 @@ public class CreateEgressFirewallRuleCmd extends BaseAsyncCreateCmd implements F
                 if (!NetUtils.isValidCIDR(cidr)) {
                     throw new ServerApiException(ApiErrorCode.PARAM_ERROR, "Source cidrs formatting error " + cidr);
                 }
-                //if (cidr.equals(NetUtils.ALL_CIDRS)) {
-                //    continue;
-                //}
+                if (cidr.equals(NetUtils.ALL_CIDRS)) {
+                    continue;
+                }
                 if (!NetUtils.isNetworkAWithinNetworkB(cidr, guestCidr)) {
                     throw new ServerApiException(ApiErrorCode.PARAM_ERROR, cidr + " is not within the guest cidr " + guestCidr);
                 }

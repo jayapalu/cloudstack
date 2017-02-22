@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.naming.ConfigurationException;
@@ -171,7 +172,11 @@ public class FirewallManagerImpl extends ManagerBase implements FirewallService,
             throw new InvalidParameterValueException("Egress firewall rules are not supported for " + network.getGuestType() + "  networks");
         }
 
-        return createFirewallRule(null, caller, rule.getXid(), rule.getSourcePortStart(), rule.getSourcePortEnd(), rule.getProtocol(), rule.getSourceCidrList(), rule.getDestinationCidrList(),
+        List<String> sourceCidrs = rule.getSourceCidrList();
+        if (sourceCidrs != null && !sourceCidrs.isEmpty())
+        Collections.replaceAll(sourceCidrs, "0.0.0.0/0", network.getCidr());
+
+        return createFirewallRule(null, caller, rule.getXid(), rule.getSourcePortStart(), rule.getSourcePortEnd(), rule.getProtocol(), sourceCidrs, rule.getDestinationCidrList(),
                 rule.getIcmpCode(), rule.getIcmpType(), null, rule.getType(), rule.getNetworkId(), rule.getTrafficType(), rule.isDisplay());
     }
 
@@ -694,7 +699,7 @@ public class FirewallManagerImpl extends ManagerBase implements FirewallService,
         List<String> destCidr = new ArrayList<String>();
 
 
-        sourceCidr.add(NetUtils.ALL_CIDRS);
+        sourceCidr.add(network.getCidr());
         destCidr.add(NetUtils.ALL_CIDRS);
 
         FirewallRuleVO ruleVO =

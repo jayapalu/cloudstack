@@ -105,16 +105,14 @@ class CsAcl(CsDataBag):
             else:
                 self.rule['cidr'] = obj['source_cidr_list']
 
-                if self.direction == 'egress':
-                    try:
-                        if not obj['dest_cidr_list']:
-                            self.rule['dcidr'] = []
-                        else:
-                            self.rule['dcidr'] = obj['dest_cidr_list']
-                    except Exception:
+            if self.direction == 'egress':
+                try:
+                    if not obj['dest_cidr_list']:
                         self.rule['dcidr'] = []
-
-
+                    else:
+                        self.rule['dcidr'] = obj['dest_cidr_list']
+                except Exception:
+                    self.rule['dcidr'] = []
 
             logging.debug("AclIP created for rule ==> %s", self.rule)
 
@@ -136,21 +134,6 @@ class CsAcl(CsDataBag):
             if "first_port" in self.rule.keys() and \
                self.rule['first_port'] != self.rule['last_port']:
                     rnge = " --dport %s:%s" % (rule['first_port'], rule['last_port'])
-            if self.direction == 'ingress':
-                if rule['protocol'] == "icmp":
-                    self.fw.append(["mangle", "front",
-                                    " -A FIREWALL_%s" % self.ip +
-                                    " -s %s " % cidr +
-                                    " -p %s " % rule['protocol'] +
-                                    " -m %s " % rule['protocol'] +
-                                    " --icmp-type %s -j %s" % (icmp_type, self.rule['action'])])
-                else:
-                    self.fw.append(["mangle", "front",
-                                    " -A FIREWALL_%s" % self.ip +
-                                    " -s %s " % cidr +
-                                    " -p %s " % rule['protocol'] +
-                                    " -m %s " % rule['protocol'] +
-                                    "  %s -j RETURN" % rnge])
 
             logging.debug("Current ACL IP direction is ==> %s", self.direction)
 
@@ -161,17 +144,14 @@ class CsAcl(CsDataBag):
                                         " -A FIREWALL_%s" % self.ip +
                                         " -s %s " % cidr +
                                         " -p %s " % rule['protocol'] +
-                                        " -m %s " % rule['protocol'] +
                                         " --icmp-type %s -j %s" % (icmp_type, self.rule['action'])])
                     else:
                         self.fw.append(["mangle", "front",
                                         " -A FIREWALL_%s" % self.ip +
                                         " -s %s " % cidr +
                                         " -p %s " % rule['protocol'] +
-                                        " -m %s " % rule['protocol'] +
-                                        " --dport %s -j RETURN" % rnge])
+                                        "  %s -j RETURN" % rnge])
 
-                logging.debug("Current ACL IP direction is ==> %s", self.direction)
             sflag=False
             dflag=False
             if self.direction == 'egress':
